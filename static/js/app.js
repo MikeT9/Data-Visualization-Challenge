@@ -10,6 +10,21 @@ function optionChanged(value) {
         console.log(value);
         metaData(value);
     });
+
+    // build function to create the metadata panel
+    function metaData(id) {
+        dataPromise.then(function(data) {
+            var demInfo = d3.select("#sample-metadata");
+            var metadata = data.metadata;
+            demInfo.html("");
+            metaId = metadata.filter(mdata => mdata.id == id)[0];
+            console.log(metaId);
+            Object.entries(metaId).forEach(([key, value]) => {
+                demInfo.append("h4").text(`${key}: ${value}`);
+            });
+        });
+    }
+
 }
 
 // return promise then function
