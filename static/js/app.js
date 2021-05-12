@@ -4,41 +4,10 @@ const file = "samples.json";
 const dataPromise = d3.json(file);
 console.log("Data Promise: ", dataPromise);
 
-function optionChanged(value) {
-    dataPromise.then(function(data) {
-        console.log(data);
-        console.log(value);
-        metaData(value);
-    });
-
-    // build function to create the metadata panel
-    function metaData(id) {
-        dataPromise.then(function(data) {
-            var demInfo = d3.select("#sample-metadata");
-            var metadata = data.metadata;
-            demInfo.html("");
-            metaId = metadata.filter(mdata => mdata.id == id)[0];
-            console.log(metaId);
-            Object.entries(metaId).forEach(([key, value]) => {
-                demInfo.append("h4").text(`${key}: ${value}`);
-            });
-        });
-    }
-
-}
-
-// return promise then function
-dataPromise.then(function(data) {
-    console.log(data);
-    
-    // set variables
-    var names = data.names;
-    var metadata = data.metadata;
-    console.log(names);
-
+// dropdown menu
+function createDropMenu(names) {
     // Use D3 to select the elements
     var dropdownMenu = d3.select("#selDataset");
-    var demInfo = d3.select("#sample-metadata");
 
     // Assign the value of the dropdown menu option to a variable
     names.forEach(function (nameId) {
@@ -47,15 +16,36 @@ dataPromise.then(function(data) {
             .property("value", nameId)
         
     });
+}
 
-    // build function to create the metadata panel
-    function metaData(id) {
+function optionChanged(value) {
+        console.log(rawData);
+        console.log(value);
+        metaData(value);
+};
+
+
+// build function to create the metadata panel
+function metaData(id) {
+        var demInfo = d3.select("#sample-metadata");
+        var metadata = rawData.metadata;
         demInfo.html("");
         metaId = metadata.filter(mdata => mdata.id == id)[0];
         console.log(metaId);
         Object.entries(metaId).forEach(([key, value]) => {
             demInfo.append("h4").text(`${key}: ${value}`);
         });
-    }
+};
+
+rawData = [];
+// return promise then function
+dataPromise.then(function(data) {
+    rawData = data
+    
+    // set variables
+    var names = data.names;
+    console.log(names);
+
+    createDropMenu(names)
     metaData(names[0])
 });
