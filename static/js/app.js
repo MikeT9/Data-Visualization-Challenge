@@ -47,7 +47,7 @@ function createHorPlot(id) {
     patientId = sampleData.filter(sdata => sdata.id == id)[0];
 
 
-    console.log(patientId.id);
+    // console.log(patientId.id);
     // console.log(patientId.otu_ids);
     // console.log(patientId.sample_values);
     // console.log(patientId.otu_labels);
@@ -64,15 +64,15 @@ function createHorPlot(id) {
     reversedSval = slicedSval.reverse();
     reversedOlab = slicedOlab.reverse();
     
-    console.log(reversedOids);
-    console.log(reversedSval);
-    console.log(reversedOlab);
+    // console.log(reversedOids);
+    // console.log(reversedSval);
+    // console.log(reversedOlab);
 
     // Trace1 for the Patient Data
     var trace1 = {
-      x: reversedSval,
-      y: `OTU ${reversedOids}`,
-      text: reversedOlab,
+      x: reversedSval.map(d=>d),
+      y: reversedOids.map(d=>`OTU ${d}`),
+      text: reversedOlab.map(d=>d),
       name: "Samples",
       type: "bar",
       orientation: "h"
