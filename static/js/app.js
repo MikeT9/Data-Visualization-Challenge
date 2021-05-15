@@ -23,6 +23,7 @@ function optionChanged(value) {
     // console.log(value);
     metaData(value);
     createHorPlot(value);
+    createScatterPlot (value)
 };
 
 
@@ -90,6 +91,39 @@ function createHorPlot(id) {
     Plotly.newPlot("bar", barData, layout);
 };
 
+function createScatterPlot (id) {
+    var sScatter = d3.select("#bubble");
+    var sampleData = rawData.samples;
+    sScatter.html("");
+
+    patientId = sampleData.filter(sdata => sdata.id == id)[0];
+    console.log(patientId);
+
+    // Trace1 for the Patient Data
+    var trace1 = {
+      x: patientId.otu_ids.map(d=>d),
+      y: patientId.sample_values.map(d=>d),
+      text: patientId.otu_labels.map(d=>d),
+      name: "Samples",
+      type: "scatter",
+      mode: "markers",
+      marker: {
+        size: patientId.sample_values.map(d=>d),
+        color: patientId.otu_ids.map(d=>d),
+      }
+    };
+
+    // scatter data
+    var scatterData = [trace1];
+
+    // Apply the group bar mode to the layout
+    var layout = {
+      title: "Bacteria cultures per sample",
+    };
+
+    // Render the plot to the div tag with id "bubble"
+    Plotly.newPlot("bubble", scatterData, layout);
+};
 
 rawData = [];
 // return promise then function
@@ -103,4 +137,5 @@ dataPromise.then(function(data) {
     createDropMenu(names);
     metaData(names[0]);
     createHorPlot(names[0]);
+    createScatterPlot (names[0]);
 });
